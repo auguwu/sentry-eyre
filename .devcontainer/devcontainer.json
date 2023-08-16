@@ -1,0 +1,25 @@
+{
+    "name": "sentry-eyre",
+    "image": "ghcr.io/auguwu/coder-images/rust",
+    "containerUser": "noel",
+    "remoteUser": "noel",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "dotfiles.installCommand": "./bootstrap.sh",
+                "dotfiles.repository": "https://github.com/auguwu/.dotfiles",
+                "dotfiles.targetPath": "~/.dotfiles"
+            },
+            "extensions": [
+                "me-dutour-mathieu.vscode-github-actions",
+                "ms-azuretools.vscode-docker",
+                "tamasfe.even-better-toml",
+                "rust-lang.rust-analyzer",
+                "redhat.vscode-yaml"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/sshd": {}
+    }
+}

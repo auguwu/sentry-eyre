@@ -1,0 +1,94 @@
+# 🐻‍❄️👀 sentry-eyre: Sentry integration for `eyre`.
+# Copyright (c) 2023 Noel Towa <cutie@floofy.dev>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+name: CI
+on:
+    workflow_dispatch: {}
+    pull_request:
+        types: [opened, synchronize]
+        branches:
+            - master
+
+        paths-ignore:
+            - 'assets/**'
+            - .dockerignore
+            - .gitignore
+            - '**.md'
+            - LICENSE
+            - renovate.json
+    push:
+        branches:
+            - 'issue/gh-**'
+            - 'feat/**'
+            - master
+
+        paths-ignore:
+            - '.github/**'
+            - '.coder/**'
+            - '.vscode/**'
+            - 'assets/**'
+            - '.*ignore'
+            - '**.md'
+            - LICENSE
+            - renovate.json
+jobs:
+    rust:
+        name: Rust CI [${{matrix.rust-version}}]
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                rust-version: [stable, nightly]
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Rust toolchain
+              uses: dtolnay/rust-toolchain@master
+              with:
+                toolchain: ${{matrix.rust-version}}
+                components: clippy, rustfmt
+
+            - name: Setup Rust cache
+              uses: Swatinem/rust-cache@v2
+
+            - name: Pull dependencies
+              run: cargo build --all-features
+    clippy:
+        name: Clippy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Rust toolchain
+              uses: dtolnay/rust-toolchain@master
+              with:
+                toolchain: stable
+                components: clippy, rustfmt
+
+            - name: Setup Rust cache
+              uses: Swatinem/rust-cache@v2
+
+            - name: Clippy!
+              uses: auguwu/clippy-action@1.2.2
+              with:
+                all-features: true
+                token: ${{secrets.GITHUB_TOKEN}}
