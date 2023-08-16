@@ -49,6 +49,8 @@ on:
             - '**.md'
             - LICENSE
             - renovate.json
+permissions:
+    checks: write
 jobs:
     rust:
         name: Rust CI [${{matrix.rust-version}}]
