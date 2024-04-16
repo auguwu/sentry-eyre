@@ -35,5 +35,5 @@ default = ["backtrace"]
 
 [dependencies]
 eyre = "0.6.12"
-sentry-backtrace = { version = "0.32.2", optional = true }
-sentry-core = "0.32.2"
+sentry-backtrace = { version = "0.32.3", optional = true }
+sentry-core = "0.32.3"
