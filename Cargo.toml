@@ -1,5 +1,5 @@
 # 🐻‍❄️👀 sentry-eyre: Sentry integration for `eyre`.
-# Copyright (c) 2023 Noel Towa <cutie@floofy.dev>
+# Copyright (c) 2023-2024 Noel Towa <cutie@floofy.dev>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +27,7 @@ edition = "2021"
 license = "MIT"
 authors = ["Noel Towa <cutie@floofy.dev>"]
 repository = "https://github.com/auguwu/sentry-eyre"
-# documentation = "https://docs.floofy.dev/libraries/sentry-eyre/0.1.0"
-
-[features]
-backtrace = ["dep:sentry-backtrace"]
-default = ["backtrace"]
 
 [dependencies]
 eyre = "0.6.12"
-sentry-backtrace = { version = "0.34.0", optional = true }
 sentry-core = "0.34.0"

@@ -1,5 +1,5 @@
 // 🐻‍❄️👀 sentry-eyre: Sentry integration for `eyre`.
-// Copyright (c) 2023 Noel Towa <cutie@floofy.dev>
+// Copyright (c) 2023-2024 Noel Towa <cutie@floofy.dev>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,9 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//! # 🐻‍❄️👀 sentry-eyre
-//! > *[Sentry](https://github.com/getsentry/sentry-rust) integration for [`eyre`](https://crates.io/crates/eyre)*
-//!
 //! **sentry-eyre** is a integration to capture [`eyre::Report`](https://docs.rs/eyre/latest/eyre/struct.Report.html)s. This crate
 //! was inspired by the `sentry-anyhow` integration, and does a similar API but distinct enough to not create any issues.
 //!
@@ -39,10 +36,6 @@
 //!     capture_report(&e);
 //! }
 //! ```
-//!
-//! ## Features
-//! * `backtrace` (enabled by default): If it should collect the backtrace from this [`Report`](https://docs.rs/eyre/latest/eyre/struct.Report.html)
-//!   with the [`sentry-backtrace`](https://crates.io/crates/sentry-backtrace) crate.
 
 use eyre::Report;
 use sentry_core::{event_from_error, protocol::Event, types::Uuid, Hub};

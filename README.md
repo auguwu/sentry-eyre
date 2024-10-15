@@ -1,13 +1,12 @@
 # 🐻‍❄️👀 sentry-eyre
 > *Sentry integration for [`eyre`](https://crates.io/crates/eyre)*
 
-**sentry-eyre** is a integration to capture [`eyre::Report`](https://docs.rs/eyre/latest/eyre/struct.Report.html)s. This crate
-was inspired by the `sentry-anyhow` integration, and does a similar API but distinct enough to not create any issues.
+**sentry-eyre** is a integration to capture [`eyre::Report`](https://docs.rs/eyre/latest/eyre/struct.Report.html)s. This crate was inspired by the `sentry-anyhow` integration, and does a similar API but distinct enough to not create any issues.
 
 ## Usage
 ```toml
 [dependencies]
-sentry-eyre = "0.1"
+sentry-eyre = "0.2"
 sentry = "*"
 ```
 
@@ -37,4 +36,4 @@ fn main() {
 ```
 
 ## License
-**sentry-eyre** is released under the [MIT License](https://github.com/auguwu/sentry-eyre/blob/master/LICENSE) with love by Noel.
+**sentry-eyre** is released under the [MIT License](https://github.com/auguwu/sentry-eyre/blob/master/LICENSE) with love by **Noel Towa** <cutie@floofy.dev>
