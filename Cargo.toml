@@ -22,7 +22,7 @@
 [package]
 name = "sentry-eyre"
 description = "🐻‍❄️👀 Sentry integration for `eyre`"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license = "MIT"
 authors = ["Noel Towa <cutie@floofy.dev>"]
