@@ -30,4 +30,4 @@ repository = "https://github.com/auguwu/sentry-eyre"
 
 [dependencies]
 eyre = "0.6.12"
-sentry-core = "0.44.0"
+sentry-core = "0.45.0"
