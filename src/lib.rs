@@ -51,7 +51,26 @@ pub fn capture_report(report: &Report) -> Uuid {
 /// be consumed directly unless you want access to the created [`Event`] from a [`Report`].
 pub fn event_from_report(report: &Report) -> Event<'static> {
     let err: &dyn Error = report.as_ref();
-    event_from_error(err)
+    
+    // It's not mutated for not(feature = "backtrace")
+    #[allow(unused_mut)]
+    let mut event = event_from_error(dyn_err);
+
+    #[cfg(feature = "backtrace")]
+    {
+        // exception records are sorted in reverse
+        if let Some(exc) = event.exception.iter_mut().last() {
+            let backtrace = err.backtrace();
+            if matches!(
+                backtrace.status(),
+                std::backtrace::BacktraceStatus::Captured
+            ) {
+                exc.stacktrace = sentry_backtrace::parse_stacktrace(&format!("{backtrace:#}"));
+            }
+        }
+    }
+
+    event
 }
 
 /// Extension trait to implement a `capture_report` method on any implementations.
