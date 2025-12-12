@@ -1,9 +1,11 @@
 # 🐻‍❄️👀 sentry-eyre
-> *Sentry integration for [`eyre`](https://crates.io/crates/eyre)*
+
+> _Sentry integration for [`eyre`](https://crates.io/crates/eyre)_
 
 **sentry-eyre** is a integration to capture [`eyre::Report`](https://docs.rs/eyre/latest/eyre/struct.Report.html)s. This crate was inspired by the `sentry-anyhow` integration, and does a similar API but distinct enough to not create any issues.
 
 ## Usage
+
 ```toml
 [dependencies]
 sentry-eyre = "0.2"
@@ -35,5 +37,25 @@ fn main() {
 }
 ```
 
+## Backtrace support for `stable-eyre`
+
+```toml
+[dependencies]
+sentry-eyre = { version = "0.2", features = ["stable-backtrace"]
+sentry = "*"
+eyre = "*"
+stable-eyre = "*"
+```
+
+```rs
+fn main() {
+    // enable stable-eyre before any eyre reports are created
+    stable_eyre::install().unwrap();
+
+    // rest of your main function
+}
+```
+
 ## License
+
 **sentry-eyre** is released under the [MIT License](https://github.com/auguwu/sentry-eyre/blob/master/LICENSE) with love by **Noel Towa** <cutie@floofy.dev>
