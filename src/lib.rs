@@ -38,7 +38,7 @@
 //! ```
 
 use eyre::Report;
-use sentry_core::{event_from_error, protocol::Event, types::Uuid, Hub};
+use sentry_core::{protocol::Event, types::Uuid, Hub};
 use std::error::Error;
 
 /// Captures a [`Report`] and sends it to Sentry. Refer to the top-level
@@ -51,7 +51,23 @@ pub fn capture_report(report: &Report) -> Uuid {
 /// be consumed directly unless you want access to the created [`Event`] from a [`Report`].
 pub fn event_from_report(report: &Report) -> Event<'static> {
     let err: &dyn Error = report.as_ref();
-    event_from_error(err)
+
+    // It's not mutated for not(feature = "stable-backtrace")
+    #[allow(unused_mut)]
+    let mut event = sentry_core::event_from_error(err);
+
+    #[cfg(feature = "stable-backtrace")]
+    {
+        // exception records are sorted in reverse
+        if let Some(exc) = event.exception.iter_mut().last() {
+            use stable_eyre::BacktraceExt;
+            if let Some(backtrace) = report.backtrace() {
+                exc.stacktrace = sentry_backtrace::parse_stacktrace(&format!("{backtrace:#?}"));
+            }
+        }
+    }
+
+    event
 }
 
 /// Extension trait to implement a `capture_report` method on any implementations.
@@ -71,4 +87,51 @@ mod private {
     pub trait Sealed {}
 
     impl Sealed for sentry_core::Hub {}
+}
+
+#[cfg(all(feature = "stable-backtrace", test))]
+mod tests {
+    use super::*;
+    use std::sync::Once;
+
+    static INIT: Once = Once::new();
+
+    fn init_test_environment() {
+        INIT.call_once(|| {
+            std::env::set_var("RUST_BACKTRACE", "1");
+            stable_eyre::install().unwrap();
+        });
+    }
+
+    #[test]
+    fn test_event_from_report_with_backtrace() {
+        init_test_environment();
+
+        let event = event_from_report(&eyre::eyre!("Oh jeez"));
+
+        let stacktrace = event.exception[0].stacktrace.as_ref().unwrap();
+        let found_test_fn = stacktrace
+            .frames
+            .iter()
+            .find(|frame| match &frame.function {
+                Some(f) => f.contains("test_event_from_report_with_backtrace"),
+                None => false,
+            });
+
+        assert!(found_test_fn.is_some());
+    }
+
+    #[test]
+    fn test_capture_eyre_uses_event_from_report_helper() {
+        init_test_environment();
+
+        let err = &eyre::eyre!("Oh jeez");
+
+        let event = event_from_report(err);
+        let events = sentry::test::with_captured_events(|| {
+            capture_report(err);
+        });
+
+        assert_eq!(event.exception, events[0].exception);
+    }
 }
