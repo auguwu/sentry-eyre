@@ -1,5 +1,5 @@
 // 🐻‍❄️👀 sentry-eyre: Sentry integration for `eyre`.
-// Copyright (c) 2023-2024 Noel Towa <cutie@floofy.dev>
+// Copyright (c) 2023-2026 Noel Towa <cutie@floofy.dev>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
+//
 //! **sentry-eyre** is a integration to capture [`eyre::Report`](https://docs.rs/eyre/latest/eyre/struct.Report.html)s. This crate
 //! was inspired by the `sentry-anyhow` integration, and does a similar API but distinct enough to not create any issues.
 //!
@@ -36,6 +36,10 @@
 //!     capture_report(&e);
 //! }
 //! ```
+
+#![doc(html_logo_url = "https://cdn.floofy.dev/images/Noel.png")]
+#![doc(html_favicon_url = "https://cdn.floofy.dev/images/Noel.png")]
+#![cfg_attr(any(noeldoc, docsrs), feature(doc_cfg))]
 
 use eyre::Report;
 use sentry_core::{protocol::Event, types::Uuid, Hub};
