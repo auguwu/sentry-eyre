@@ -71,6 +71,18 @@ pub fn event_from_report(report: &Report) -> Event<'static> {
         }
     }
 
+    #[cfg(feature = "color-backtrace")]
+    {
+        if let Some(exc) = event.exception.iter_mut().last() {
+            use color_eyre::Handler;
+            if let Some(handler) = report.handler().and_then(|h| h.downcast_ref::<Handler>()) {
+                if let Some(backtrace) = handler.backtrace() {
+                    exc.stacktrace = sentry_backtrace::parse_stacktrace(&format!("{backtrace:#?}"));
+                }
+            }
+        }
+    }
+
     event
 }
 
